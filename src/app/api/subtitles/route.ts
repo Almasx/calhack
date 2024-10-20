@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
 
     const subtitle = await request.json();
     const result = await db.collection("subtitles").insertOne(subtitle);
-
     return NextResponse.json(
       { message: "Subtitle saved", data: result },
       { status: 201 }

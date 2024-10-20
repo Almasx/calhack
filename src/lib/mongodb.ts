@@ -1,7 +1,7 @@
 // lib/mongodb.ts
 import { MongoClient, Db } from "mongodb";
 
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
+const uri = process.env.MONGODB_URI;
 const options = {};
 
 let client: MongoClient;
@@ -14,7 +14,7 @@ declare global {
 }
 
 if (!global._mongoClientPromise) {
-  client = new MongoClient(uri, options);
+  client = new MongoClient(uri!, options);
   global._mongoClientPromise = client.connect();
 }
 
