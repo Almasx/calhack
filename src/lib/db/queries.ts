@@ -36,3 +36,34 @@ export async function getSummaries(): Promise<Summary[]> {
     timestamp: summary.timestamp,
   }));
 }
+
+export interface Headline {
+  _id: string;
+  text: string;
+  timestamp: Date;
+}
+
+export async function getHeadlines(): Promise<Headline[]> {
+  const client = await clientPromise;
+  const db = client.db(process.env.MONGODB_DB || "myproject");
+
+  const headlines = await db
+    .collection("headlines")
+    .find()
+    .sort({ timestamp: -1 })
+    .limit(10)
+    .toArray();
+
+  return headlines.map((headline) => ({
+    _id: headline._id.toString(),
+    text: headline.headline,
+    timestamp: headline.timestamp,
+  }));
+}
+
+export async function clearHeadlines(): Promise<void> {
+  const client = await clientPromise;
+  const db = client.db(process.env.MONGODB_DB || "myproject");
+
+  await db.collection("headlines").deleteMany({});
+}

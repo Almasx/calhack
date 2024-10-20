@@ -1,7 +1,12 @@
 import { Call } from "~/components/call-panel";
 import { Sidebar } from "~/layouts/sidebar";
 import { AGORA_APP_ID } from "~/lib/agora/const";
-import { getSubtitles, getSummaries } from "~/lib/db/queries";
+import {
+  getSubtitles,
+  getSummaries,
+  getHeadlines,
+  clearHeadlines,
+} from "~/lib/db/queries";
 
 interface PageProps {
   params: { channelName: string };
@@ -11,9 +16,10 @@ export default async function ChannelPage({ params }: PageProps) {
   const { channelName } = params;
 
   try {
-    const [subtitles, summaries] = await Promise.all([
+    const [subtitles, summaries, headlines] = await Promise.all([
       getSubtitles(),
       getSummaries(),
+      getHeadlines(),
     ]);
 
     return (
@@ -22,6 +28,7 @@ export default async function ChannelPage({ params }: PageProps) {
         <Sidebar
           initialSubtitles={subtitles}
           summaries={summaries.map((s) => s)}
+          headlines={headlines}
         />
       </div>
     );

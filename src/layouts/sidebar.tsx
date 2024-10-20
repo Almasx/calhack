@@ -5,16 +5,18 @@ import { Transcripts } from "../components/transcript-panel";
 import { useUIStore } from "../store/ui-store";
 import { AIPanel } from "~/components/ai-panel";
 import { ITextItem } from "~/store/subtitle-store";
-import { Summary } from "~/lib/db/queries";
+import { Headline, Summary } from "~/lib/db/queries";
 
 const animation = { type: "spring", duration: 0.5, bounce: 0 };
 
 export const Sidebar = ({
   initialSubtitles,
   summaries,
+  headlines,
 }: {
   initialSubtitles: ITextItem[];
   summaries: Summary[];
+  headlines: Headline[];
 }) => {
   const { isAIOpen, isTranscriptOpen } = useUIStore();
 
@@ -42,7 +44,7 @@ export const Sidebar = ({
                 className="absolute top-0 left-0 w-full h-full"
               >
                 <div className="h-full overflow-y-auto gap-2 flex flex-col">
-                  <AIPanel summaries={summaries} />
+                  <AIPanel summaries={summaries} headlines={headlines} />
                 </div>
               </motion.div>
               <motion.div

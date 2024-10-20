@@ -1,11 +1,17 @@
 import { Notes } from "./notes";
 import { Summary } from "./summary";
-import { Summary as ISummary } from "~/lib/db/queries";
+import { Headline, Summary as ISummary } from "~/lib/db/queries";
 
-export const AIPanel = ({ summaries }: { summaries: ISummary[] }) => {
+export const AIPanel = ({
+  summaries,
+  headlines,
+}: {
+  summaries: ISummary[];
+  headlines: Headline[];
+}) => {
   return (
     <>
-      <Summary />
+      <Summary headlines={headlines} />
       <Notes summaries={summaries} />
     </>
   );
