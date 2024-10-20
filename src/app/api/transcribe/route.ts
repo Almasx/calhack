@@ -43,7 +43,6 @@ export async function DELETE(request: NextRequest) {
 async function handleStartTranscription(channel: string) {
   const uid = "almas"; // Example UID, ideally this should come from the client
   const tokenData = await apiSTTAcquireToken({ channel, uid });
-  console.log(tokenData);
 
   const { taskId } = await apiSTTStartTranscription({
     uid,

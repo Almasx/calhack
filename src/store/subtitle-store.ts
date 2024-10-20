@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // lib/store.ts
 import { create } from "zustand";
 import { ITextstream } from "~/app/hook/utils";
 
-interface ITextItem {
+export interface ITextItem {
   dataType: "transcribe" | "translate";
   uid: string | number;
   username: string;
@@ -20,7 +21,6 @@ interface SubtitlesState {
   updateSubtitles: (textstream: ITextstream, username: string) => void;
 }
 
-// Helper function to save a final subtitle to MongoDB
 async function saveSubtitleToDB(subtitle: ITextItem) {
   try {
     const response = await fetch("/api/subtitles", {
@@ -46,8 +46,7 @@ export const useSubtitlesStore = create<SubtitlesState>((set) => ({
   subtitles: [],
   updateSubtitles: (textstream, username) =>
     set((state) => {
-      const { dataType, culture, uid, time, durationMs, textTs, words } =
-        textstream;
+      const { dataType, culture, uid, textTs, words } = textstream;
 
       if (dataType === "transcribe") {
         let textStr = "";
@@ -73,7 +72,7 @@ export const useSubtitlesStore = create<SubtitlesState>((set) => ({
             text: textStr,
             lang: culture,
             isFinal,
-            time: time + durationMs,
+            time: textTs, // Use textTs directly for the time
             startTextTs: textTs,
             textTs,
           };
@@ -91,7 +90,7 @@ export const useSubtitlesStore = create<SubtitlesState>((set) => ({
             ...updatedSubtitles[existingSubtitleIndex],
             text: textStr,
             isFinal,
-            time: time + durationMs,
+            time: textTs, // Update time with textTs
             textTs,
           };
 

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { IAgoraRTCClient } from "agora-rtc-react";
 import { ITextstream, Parser } from "./utils";
-import { useSubtitlesStore } from "~/lib/store";
+import { useSubtitlesStore } from "~/store/subtitle-store";
 
 // Assuming you have a parser instance
 const parser = new Parser();
@@ -24,11 +24,8 @@ const useStreamSubscription = (client: IAgoraRTCClient | null) => {
       console.warn("something");
     });
 
-    // Handle parsed data
     const handleTextStreamReceived = (textstream: ITextstream) => {
       console.warn("Received textstream:", textstream);
-      // Here you can update your state or perform any other actions
-      // with the received textstream data
       const username = `User ${textstream.uid}`;
       updateSubtitles(textstream, username);
     };
