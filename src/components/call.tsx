@@ -15,11 +15,15 @@ import AgoraRTC, {
 } from "agora-rtc-react";
 import Link from "next/link";
 import { useState } from "react";
+import useStreamSubscription from "~/app/hook/stream";
 
 function Call(props: { appId: string; channelName: string }) {
   const client = useRTCClient(
     AgoraRTC.createClient({ codec: "vp8", mode: "rtc" })
   );
+
+  useStreamSubscription(client);
+
   const [builderToken, setBuilderToken] = useState<string | null>(null);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [message, setMessage] = useState<string>("");
