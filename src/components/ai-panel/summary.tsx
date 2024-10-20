@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Headline } from "~/lib/db/queries";
+import clsx from "clsx";
 
 interface SummaryProps {
   headlines: Headline[];
+  className?: string;
 }
 
-export const Summary: React.FC<SummaryProps> = ({ headlines }) => {
+export const Summary: React.FC<SummaryProps> = ({ headlines, className }) => {
   const [currentHeadline, setCurrentHeadline] = useState<Headline | null>(
     headlines[0] || null
   );
@@ -21,7 +23,12 @@ export const Summary: React.FC<SummaryProps> = ({ headlines }) => {
   }, [headlines]);
 
   return (
-    <div className="bg-gradient-to-b text-[#33DBC6] gap-8 p-3 from-[#002421]/20 to-[#07615A]/20 rounded-xl flex flex-col shadow-[inset_0_0_24px_rgba(51,220,198,0.25)]">
+    <div
+      className={clsx(
+        "bg-gradient-to-b text-[#33DBC6] gap-8 p-3 from-[#002421]/20 to-[#07615A]/20 rounded-xl flex flex-col shadow-[inset_0_0_24px_rgba(51,220,198,0.25)]",
+        className
+      )}
+    >
       <AnimatePresence mode="popLayout">
         {currentHeadline && (
           <motion.span

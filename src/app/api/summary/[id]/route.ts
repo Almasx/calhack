@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import clientPromise from "~/lib/mongodb";
+import { getSummaries } from "~/lib/db/queries";
 
 export async function DELETE(
   request: NextRequest,

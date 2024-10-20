@@ -1,15 +1,36 @@
 "use client";
+import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Summary } from "~/components/ai-panel/summary";
+import { Headline } from "~/lib/db/queries";
+
+const PRODUCT_DEMO_HEADLINES: Headline[] = [
+  {
+    _id: "1",
+    text: "The next big thing in Real Time AI is here",
+    timestamp: new Date(),
+  },
+  {
+    _id: "2",
+    text: "AI is changing the game",
+    timestamp: new Date(),
+  },
+  {
+    _id: "3",
+    text: "AI is the future",
+    timestamp: new Date(),
+  },
+];
 
 export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="mb-4 mt-20 text-4xl font-extrabold leading-none tracking-tight text-gray-900">
-        <span className="text-black">NextJS</span> x{" "}
-        <span className="text-blue-500">Agora</span>
-      </h1>
+    <div className="flex flex-col items-center h-screen w-96 mx-auto justify-center">
+      <Summary
+        headlines={PRODUCT_DEMO_HEADLINES}
+        className="mb-8 w-64 scale-[1.5] origin-bottom"
+      />
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -18,30 +39,23 @@ export default function Home() {
           };
           router.push(`/channel/${target.channel.value}`);
         }}
+        className="flex flex-col mt-6 w-full"
       >
-        <div className="md:flex md:items-center mt-6">
-          <div>
-            <label
-              className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-              htmlFor="inline-full-name"
-            >
-              Channel Name
-            </label>
-          </div>
-          <div>
-            <input
-              className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-              id="inline-full-name"
-              type="text"
-              name="channel"
-              placeholder="Enter channel name"
-              required
-            />
-          </div>
-        </div>
-        <div className="text-center">
-          <button className="inline-flex items-center justify-center px-5 py-3 mt-5 text-base font-medium text-center text-white bg-blue-400 rounded-[10px] hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
-            Submit
+        <label className="block text-neutral-500 mb-1 ">Channel Name</label>
+        <div className="flex gap-3 grow">
+          <input
+            className="bg-neutral-900 placeholder:text-neutral-500 grow border border-neutral-800 rounded-xl px-3 h-11 shadow-[inset_0_0_20px_rgba(36,36,36,0.5)] focus:outline-none focus:border-neutral-700"
+            id="inline-full-name"
+            type="text"
+            name="channel"
+            placeholder="Enter channel name"
+            required
+          />
+          <button
+            type="submit"
+            className="flex size-11 aspect-square items-center justify-center text-[#00FFE1]  bg-[#0A453E] hover:bg-[#0E5850] duration-150 ease-out rounded-xl shadow-[0_0_10px_rgba(68,239,219,0.3)_inset]"
+          >
+            <ChevronRight />
           </button>
         </div>
       </form>

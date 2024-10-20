@@ -3,13 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Summary } from "~/lib/db/queries";
 import { formatTime } from "~/lib/agora/utils";
 import { X } from "lucide-react";
+import { useLatestSummaries } from "./hook";
 
 export const Notes = ({
   summaries: initialSummaries,
 }: {
   summaries: Summary[];
 }) => {
-  const [summaries, setSummaries] = useState(initialSummaries);
+  const { summaries, setSummaries } = useLatestSummaries(initialSummaries);
 
   const handleDeleteNote = async (id: string) => {
     setSummaries(summaries.filter((summary) => summary._id !== id));
@@ -94,16 +95,6 @@ const Note = ({
 };
 
 const ListeningIndicator = () => {
-  const [remainingTime, setRemainingTime] = useState(5);
-  useEffect(() => {
-    if (remainingTime > 0) {
-      const timer = setTimeout(() => {
-        setRemainingTime(remainingTime - 1);
-      }, 60000); // Decrease by 1 every minute
-      return () => clearTimeout(timer);
-    }
-  }, [remainingTime]);
-
   return (
     <motion.div
       className="pr-1.5 pt-1.5 pb-2.5 pl-2.5 bg-gradient-to-br from-[#171717] via-[#171717] to-neutral-900 flex h-14 justify-center items-center gap-2 text-neutral-500 rounded-[10px] text-sm"
@@ -127,10 +118,7 @@ const ListeningIndicator = () => {
         animate={{ rotate: 360 }}
         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
       />
-      <span>
-        Listening and waiting for {remainingTime} min
-        {remainingTime !== 1 ? "s" : ""}
-      </span>
+      <span>Listening and waiting for 1 min</span>
     </motion.div>
   );
 };
