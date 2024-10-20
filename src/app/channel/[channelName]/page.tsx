@@ -1,4 +1,5 @@
 import Call from "~/components/call";
+import SubtitlesDisplay from "~/components/transcript";
 import { AGORA_APP_ID } from "~/lib/agora/const";
 
 export default function Page({ params }: { params: { channelName: string } }) {
@@ -8,6 +9,7 @@ export default function Page({ params }: { params: { channelName: string } }) {
         {params.channelName!}
       </p>
       <Call appId={AGORA_APP_ID} channelName={params.channelName}></Call>
+      <SubtitlesDisplay />
     </main>
   );
 }
