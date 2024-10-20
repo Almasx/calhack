@@ -1,3 +1,4 @@
+// lib/store.ts
 import { create } from "zustand";
 import { ITextstream } from "~/app/hook/utils";
 
@@ -19,6 +20,28 @@ interface SubtitlesState {
   updateSubtitles: (textstream: ITextstream, username: string) => void;
 }
 
+// Helper function to save a final subtitle to MongoDB
+async function saveSubtitleToDB(subtitle: ITextItem) {
+  try {
+    const response = await fetch("/api/subtitles", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(subtitle),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Failed to save subtitle to MongoDB");
+    }
+
+    console.log("Subtitle saved to MongoDB:", await response.json());
+  } catch (error) {
+    console.error("Error saving subtitle to MongoDB:", error);
+  }
+}
+
 export const useSubtitlesStore = create<SubtitlesState>((set) => ({
   subtitles: [],
   updateSubtitles: (textstream, username) =>
@@ -29,6 +52,7 @@ export const useSubtitlesStore = create<SubtitlesState>((set) => ({
       if (dataType === "transcribe") {
         let textStr = "";
         let isFinal = false;
+
         words.forEach((word: any) => {
           textStr += word.text;
           if (word.isFinal) {
@@ -53,6 +77,12 @@ export const useSubtitlesStore = create<SubtitlesState>((set) => ({
             startTextTs: textTs,
             textTs,
           };
+
+          // Save the final subtitle to MongoDB
+          if (isFinal) {
+            saveSubtitleToDB(newSubtitle);
+          }
+
           return { subtitles: [...state.subtitles, newSubtitle] };
         } else {
           // Update existing subtitle
@@ -64,11 +94,16 @@ export const useSubtitlesStore = create<SubtitlesState>((set) => ({
             time: time + durationMs,
             textTs,
           };
+
+          // Save the final subtitle to MongoDB if it's now final
+          if (isFinal) {
+            saveSubtitleToDB(updatedSubtitles[existingSubtitleIndex]);
+          }
+
           return { subtitles: updatedSubtitles };
         }
       } else if (dataType === "translate") {
         // Handle translation logic here if needed
-        // This part would be similar to the 'translate' case in the original code
         return state;
       }
 
